@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Prueba CRUD (Create, Read, Update, Delete) using Spring boot y angularjs</title>
+        <script src="jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+        <script src="jquery.dataTables.min.js"></script>
+        <script src="angular-datatables.min.js"></script>
+        <script src="bootstrap.min.js"></script>
+        <link rel="stylesheet" href="bootstrap.min.css">
+        <link rel="stylesheet" href="datatables.bootstrap.css">
+        
+    </head>
+    <body ng-app="crudApp" ng-controller="crudController">
+        
+        <div class="container" ng-init="fetchData()">
+            <br/>
+                <h3 align="center">Prueba CRUD (Create, Read, Update, Delete) using Spring boot y angularjs</h3>
+            <br/>
+             <div align="right">
+                <button type="button" name="add_button" ng-click="listaPersonas()" class="btn btn-success">listar</button>
+            </div>
+                <div align="right">
+                <button type="button" name="add_button" ng-click="borraPersona()" class="btn btn-success">borrar</button>
+            </div>
+                <div align="right">
+                <button type="button" name="add_button" ng-click="actualizaPersona()" class="btn btn-success">actualizar</button>
+            </div>
+                <div align="right">
+                <button type="button" name="add_button" ng-click="creaPersona()" class="btn btn-success">crear</button>
+            </div>
+            <br/>
+        </div>
+    </body>
+</html>
+
+
+
+
+<script>
+
+var app = angular.module('crudApp', ['datatables']);
+app.controller('crudController', function($scope, $http){
+
+
+    $scope.creaPersona = function(){
+
+           var data = {
+            nombre: 'jkjjkj',
+            apellido: 'ooooo'
+            };
+
+
+        $http.post('http://localhost:8080/api/guardaPersona1',data).success(function(data){
+            console.log("guardada con retorno");
+            var b = JSON.parse(JSON.stringify(data));
+            console.log(b);
+        });
+    };
+
+  
+    $scope.listaPersonas = function(){
+
+        $http.get('http://localhost:8080/api/listaPersonas').success(function(data){
+            console.log("listadas");
+            console.log(data);
+        });
+    };
+
+
+    $scope.buscaPersona = function(){
+
+
+          $http.get('http://localhost:8080/api/listaPersonas').success(function(data){
+            $scope.namesData = data;
+        });
+    };
+
+    $scope.borraPersona = function(){
+        
+        var id = 1;
+        
+        $http.delete('http://localhost:8080/api/borrarPersona/'+id).success(function(data){
+            console.log("la data de vuelta");
+              console.log(data);
+        });
+    };
+
+    $scope.actualizaPersona = function(){
+             var id=2;
+
+            var data = {
+            id: id,
+            nombre: 'Juan',
+            apellido: 'Perez'
+            };
+            
+            $http.put('http://localhost:8080/api/actualizaPersona/'+id,data).success(function(data){              
+              console.log("la data de vuelta");
+              console.log(data);
+            });
+    };
+
+
+});
+
+</script>
